@@ -42,7 +42,7 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-maroon via-maroon-dark to-maroon-darker py-20">
+    <section class="py-20" style="background: linear-gradient(to bottom right, #800000, #660000, #4d0000);">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-5xl font-extrabold mb-6 text-white">Inspection Management System</h2>
             <p class="text-xl mb-8 max-w-3xl mx-auto text-white">
