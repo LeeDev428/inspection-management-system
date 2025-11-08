@@ -8,6 +8,9 @@
     <p class="text-gray-600 mt-2">View and manage all inspection requests in the system</p>
 </div>
 
+<!-- Search and Filter Component -->
+@include('components.search-filter', ['action' => route('admin.requests.index')])
+
 <!-- Stats Cards -->
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
     <div class="bg-white p-6 rounded-xl shadow-lg">
