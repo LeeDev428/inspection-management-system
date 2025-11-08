@@ -110,19 +110,83 @@ class InspectionRequestController extends Controller
     }
 
     // Admin: View all requests
-    public function adminIndex()
+    public function adminIndex(Request $request)
     {
-        $requests = InspectionRequest::with('user')->latest()->paginate(15);
+        $query = InspectionRequest::with('user');
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('office_department', 'LIKE', "%{$search}%")
+                  ->orWhere('purpose', 'LIKE', "%{$search}%")
+                  ->orWhere('requested_by', 'LIKE', "%{$search}%")
+                  ->orWhereHas('user', function($q) use ($search) {
+                      $q->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('email', 'LIKE', "%{$search}%");
+                  });
+            });
+        }
+
+        // Status filter
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Date range filter
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Type filter
+        if ($request->filled('type')) {
+            $type = $request->type;
+            $query->where($type, true);
+        }
+
+        $requests = $query->latest()->paginate(15)->withQueryString();
+        
         return view('admin.requests.index', compact('requests'));
     }
 
     // Admin: View pending requests
-    public function adminPending()
+    public function adminPending(Request $request)
     {
-        $requests = InspectionRequest::with('user')
-            ->where('status', 'pending')
-            ->latest()
-            ->paginate(15);
+        $query = InspectionRequest::with('user')->where('status', 'pending');
+
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('office_department', 'LIKE', "%{$search}%")
+                  ->orWhere('purpose', 'LIKE', "%{$search}%")
+                  ->orWhere('requested_by', 'LIKE', "%{$search}%")
+                  ->orWhereHas('user', function($q) use ($search) {
+                      $q->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('email', 'LIKE', "%{$search}%");
+                  });
+            });
+        }
+
+        // Date range filter
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Type filter
+        if ($request->filled('type')) {
+            $type = $request->type;
+            $query->where($type, true);
+        }
+
+        $requests = $query->latest()->paginate(15)->withQueryString();
+        
         return view('admin.requests.pending', compact('requests'));
     }
 
