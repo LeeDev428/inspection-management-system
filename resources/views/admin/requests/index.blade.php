@@ -85,9 +85,9 @@
         </table>
     </div>
 
-    <!-- Pagination -->
+    <!-- Pagination Component -->
     <div class="mt-6">
-        {{ $requests->links() }}
+        @include('components.pagination', ['paginator' => $requests])
     </div>
 @else
     <div class="bg-white rounded-xl shadow-lg p-12 text-center">
