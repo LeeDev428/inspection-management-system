@@ -54,17 +54,37 @@
                     </svg>
                     Dashboard
                 </a>
-                <a href="{{ route('admin.requests.index') }}" class="flex items-center px-6 py-3 {{ request()->routeIs('admin.requests.index') ? 'bg-maroon text-white' : 'text-gray-700 hover:bg-gray-100' }}">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    All Requests
+                <a href="{{ route('admin.requests.index') }}" class="flex items-center justify-between px-6 py-3 {{ request()->routeIs('admin.requests.index') ? 'bg-maroon text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        All Requests
+                    </div>
+                    @php
+                        $totalRequests = \App\Models\InspectionRequest::count();
+                    @endphp
+                    @if($totalRequests > 0)
+                        <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                            {{ $totalRequests }}
+                        </span>
+                    @endif
                 </a>
-                <a href="{{ route('admin.requests.pending') }}" class="flex items-center px-6 py-3 {{ request()->routeIs('admin.requests.pending') ? 'bg-maroon text-white' : 'text-gray-700 hover:bg-gray-100' }}">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Pending Approvals
+                <a href="{{ route('admin.requests.pending') }}" class="flex items-center justify-between px-6 py-3 {{ request()->routeIs('admin.requests.pending') ? 'bg-maroon text-white' : 'text-gray-700 hover:bg-gray-100' }}">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Pending Approvals
+                    </div>
+                    @php
+                        $pendingCount = \App\Models\InspectionRequest::where('status', 'pending')->count();
+                    @endphp
+                    @if($pendingCount > 0)
+                        <span class="bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                            {{ $pendingCount }}
+                        </span>
+                    @endif
                 </a>
                 {{-- <a href="#" class="flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
