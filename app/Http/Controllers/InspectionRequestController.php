@@ -114,26 +114,35 @@ class InspectionRequestController extends Controller
     {
         $query = InspectionRequest::with('user');
 
-        // Search functionality
+        // Search
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
-                $q->where('office_department', 'LIKE', "%{$search}%")
-                  ->orWhere('purpose', 'LIKE', "%{$search}%")
-                  ->orWhere('requested_by', 'LIKE', "%{$search}%")
+                $q->where('office_department', 'like', "%{$search}%")
+                  ->orWhere('purpose', 'like', "%{$search}%")
+                  ->orWhere('requested_by', 'like', "%{$search}%")
                   ->orWhereHas('user', function($q) use ($search) {
-                      $q->where('name', 'LIKE', "%{$search}%")
-                        ->orWhere('email', 'LIKE', "%{$search}%");
+                      $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
                   });
             });
         }
 
-        // Status filter
+        // Filter by status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Date range filter
+        // Filter by type (form or upload)
+        if ($request->filled('type')) {
+            if ($request->type === 'upload') {
+                $query->whereNotNull('file_path');
+            } else {
+                $query->whereNull('file_path');
+            }
+        }
+
+        // Filter by date range
         if ($request->filled('date_from')) {
             $query->whereDate('created_at', '>=', $request->date_from);
         }
@@ -141,13 +150,19 @@ class InspectionRequestController extends Controller
             $query->whereDate('created_at', '<=', $request->date_to);
         }
 
-        // Type filter
-        if ($request->filled('type')) {
-            $type = $request->type;
-            $query->where($type, true);
+        // Sorting
+        switch ($request->get('sort', 'newest')) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'office':
+                $query->orderBy('office_department', 'asc');
+                break;
+            default:
+                $query->latest();
         }
 
-        $requests = $query->latest()->paginate(15)->withQueryString();
+        $requests = $query->paginate(15)->withQueryString();
         
         return view('admin.requests.index', compact('requests'));
     }
@@ -157,21 +172,30 @@ class InspectionRequestController extends Controller
     {
         $query = InspectionRequest::with('user')->where('status', 'pending');
 
-        // Search functionality
+        // Search
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
-                $q->where('office_department', 'LIKE', "%{$search}%")
-                  ->orWhere('purpose', 'LIKE', "%{$search}%")
-                  ->orWhere('requested_by', 'LIKE', "%{$search}%")
+                $q->where('office_department', 'like', "%{$search}%")
+                  ->orWhere('purpose', 'like', "%{$search}%")
+                  ->orWhere('requested_by', 'like', "%{$search}%")
                   ->orWhereHas('user', function($q) use ($search) {
-                      $q->where('name', 'LIKE', "%{$search}%")
-                        ->orWhere('email', 'LIKE', "%{$search}%");
+                      $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
                   });
             });
         }
 
-        // Date range filter
+        // Filter by type (form or upload)
+        if ($request->filled('type')) {
+            if ($request->type === 'upload') {
+                $query->whereNotNull('file_path');
+            } else {
+                $query->whereNull('file_path');
+            }
+        }
+
+        // Filter by date range
         if ($request->filled('date_from')) {
             $query->whereDate('created_at', '>=', $request->date_from);
         }
@@ -179,13 +203,19 @@ class InspectionRequestController extends Controller
             $query->whereDate('created_at', '<=', $request->date_to);
         }
 
-        // Type filter
-        if ($request->filled('type')) {
-            $type = $request->type;
-            $query->where($type, true);
+        // Sorting
+        switch ($request->get('sort', 'newest')) {
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'office':
+                $query->orderBy('office_department', 'asc');
+                break;
+            default:
+                $query->latest();
         }
 
-        $requests = $query->latest()->paginate(15)->withQueryString();
+        $requests = $query->paginate(15)->withQueryString();
         
         return view('admin.requests.pending', compact('requests'));
     }
