@@ -14,6 +14,9 @@
     </div>
 @endif
 
+<!-- Search and Filter Component (status filter hidden since this page is pending only) -->
+@include('components.search-filter', ['action' => route('admin.requests.pending')])
+
 @if($requests->count() > 0)
     <div class="bg-white rounded-xl shadow-lg overflow-hidden">
         <table class="min-w-full divide-y divide-gray-200">
@@ -62,9 +65,9 @@
         </table>
     </div>
 
-    <!-- Pagination -->
+    <!-- Pagination Component -->
     <div class="mt-6">
-        {{ $requests->links() }}
+        @include('components.pagination', ['paginator' => $requests])
     </div>
 @else
     <div class="bg-white rounded-xl shadow-lg p-12 text-center">
