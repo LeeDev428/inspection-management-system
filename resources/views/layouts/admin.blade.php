@@ -61,14 +61,7 @@
                         </svg>
                         All Requests
                     </div>
-                    @php
-                        $totalRequests = \App\Models\InspectionRequest::count();
-                    @endphp
-                    @if($totalRequests > 0)
-                        <span class="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                            {{ $totalRequests }}
-                        </span>
-                    @endif
+                 
                 </a>
                 <a href="{{ route('admin.requests.pending') }}" class="flex items-center justify-between px-6 py-3 {{ request()->routeIs('admin.requests.pending') ? 'bg-maroon text-white' : 'text-gray-700 hover:bg-gray-100' }}">
                     <div class="flex items-center">
