@@ -62,4 +62,12 @@ class User extends Authenticatable
     {
         return $this->role === 'user';
     }
+
+    /**
+     * Get inspection requests for this user
+     */
+    public function inspectionRequests()
+    {
+        return $this->hasMany(InspectionRequest::class);
+    }
 }
