@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <div class="flex space-x-4">
-                    <a href="{{ route('login') }}" class="px-6 py-2 text-white border-2 border-white rounded-lg hover:bg-white hover:text-maroon transition font-medium">
+                    <a href="{{ route('login') }}" class="px-6 py-2 text-white border-2 border-white rounded-lg  hover:text-maroon transition font-medium">
                         Login
                     </a>
                     <a href="{{ route('register') }}" class="px-6 py-2 bg-white text-maroon rounded-lg hover:bg-gray-100 transition font-medium">
@@ -52,7 +52,7 @@
                 <a href="{{ route('register') }}" class="px-8 py-4 bg-white text-maroon rounded-lg hover:bg-gray-100 transition font-bold text-lg shadow-xl">
                     Get Started
                 </a>
-                <a href="#features" class="px-8 py-4 border-2 border-white text-white rounded-lg hover:bg-white hover:text-maroon transition font-bold text-lg">
+                <a href="#features" class="px-8 py-4 border-2 border-white text-white rounded-lg  hover:text-maroon transition font-bold text-lg">
                     Learn More
                 </a>
             </div>
